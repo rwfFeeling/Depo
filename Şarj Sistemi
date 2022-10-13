@@ -1,0 +1,62 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using UnityEngine;
+using UnityEngine.PlayerLoop;
+
+public class TopHaraket : MonoBehaviour
+{
+    [SerializeField] public Rigidbody2D _rigidbody = null;
+    [SerializeField] public float _jumpUp = 100F;
+    [SerializeField] public Vector2 _direction = Vector2.up;
+    [SerializeField] public float _charge = 0f;
+    private bool _zemin =false;
+    private bool _tutus =false;
+
+    void Start()
+    {
+        _rigidbody = GetComponent<Rigidbody2D>();
+    }
+
+   
+    void Update()
+    {
+        if(Input.GetMouseButton(0)&& !_tutus && _zemin )
+        {
+
+            _charge += 0.05f;
+        }
+        if(Input.GetMouseButtonDown(0))
+        {
+            _tutus = true;
+        }
+        if (!_zemin)
+        {
+            _charge = 0F;
+        }
+        
+    }
+    private void FixedUpdate()
+    {
+        if( _tutus)
+        {
+            _rigidbody.AddForce(_direction * _jumpUp * _charge);
+            _tutus = false;
+            _zemin = false;
+            
+        }
+    }
+
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Zemin"))
+        {
+           
+
+            _zemin = true;
+        }
+    }
+
+
+}
